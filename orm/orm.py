@@ -5,18 +5,23 @@ import asyncio, logging
 
 import aiomysql
 
+from  config import  toDict
+import config_default
+
 def log(sql, args=()):
     logging.info('SQL: %s' % sql)
 
 async def create_pool(loop, **kw):
     logging.info('create database connection pool...')
+    configs = toDict(config_default.configs)
+    db = configs.get("db")
     global __pool
     __pool = await aiomysql.create_pool(
-        host=kw.get('host', 'localhost'),
-        port=kw.get('port', 3306),
-        user=kw['user'],
-        password=kw['password'],
-        db=kw['db'],
+        host=db.get("host"),
+        port=db.get('port'),
+        user=db.get('user'),
+        password=db.get('password'),
+        db=db.get('database'),
         charset=kw.get('charset', 'utf8'),
         autocommit=kw.get('autocommit', True),
         maxsize=kw.get('maxsize', 10),
@@ -44,7 +49,7 @@ async def execute(sql, args, autocommit=True):
             await conn.begin()
         try:
             async with conn.cursor(aiomysql.DictCursor) as cur:
-                await cur.execute(sql.replace('?', '%s'), args)
+                await cur.execute(sql.replace('?','%s'), args)
                 affected = cur.rowcount
             if not autocommit:
                 await conn.commit()
@@ -127,7 +132,7 @@ class ModelMetaclass(type):
         attrs['__primary_key__'] = primaryKey # 主键属性名
         attrs['__fields__'] = fields # 除主键外的属性名
         attrs['__select__'] = 'select `%s`, %s from `%s`' % (primaryKey, ', '.join(escaped_fields), tableName)
-        attrs['__insert__'] = 'insert into `%s` (%s, `%s`) values (%s)' % (tableName, ', '.join(escaped_fields), primaryKey, create_args_string(len(escaped_fields) + 1))
+        attrs['__insert__'] = 'insert into `%s` (%s) values (%s)' % (tableName, ', '.join(escaped_fields), create_args_string(len(escaped_fields)))
         attrs['__update__'] = 'update `%s` set %s where `%s`=?' % (tableName, ', '.join(map(lambda f: '`%s`=?' % (mappings.get(f).name or f), fields)), primaryKey)
         attrs['__delete__'] = 'delete from `%s` where `%s`=?' % (tableName, primaryKey)
         return type.__new__(cls, name, bases, attrs)
@@ -208,7 +213,7 @@ class Model(dict, metaclass=ModelMetaclass):
 
     async def save(self):
         args = list(map(self.getValueOrDefault, self.__fields__))
-        args.append(self.getValueOrDefault(self.__primary_key__))
+        # args.append(self.getValueOrDefault(self.__primary_key__))
         rows = await execute(self.__insert__, args)
         if rows != 1:
             logging.warn('failed to insert record: affected rows: %s' % rows)

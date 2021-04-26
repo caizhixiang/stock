@@ -7,7 +7,7 @@ Models for user, blog, comment.
 
 __author__ = 'caizhixiang'
 
-import time, uuid
+import time
 
 from orm.orm import Model,IntegerField, StringField, BooleanField, FloatField, TextField
 
@@ -21,4 +21,4 @@ class User(Model):
     admin = BooleanField()
     name = StringField(ddl='varchar(50)')
     image = StringField(ddl='varchar(500)')
-    created_at = FloatField(default=time.time)
+    # created_at = FloatField(default=time.time)
