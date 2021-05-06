@@ -87,3 +87,15 @@ ITEM_PIPELINES = {
 # HTTPCACHE_DIR = 'httpcache'
 # HTTPCACHE_IGNORE_HTTP_CODES = []
 # HTTPCACHE_STORAGE = 'scrapy.extensions.httpcache.FilesystemCacheStorage'
+
+
+# settings.py文件下添加mysql的配置信息
+MY_MYSQL_SETTINGS = {
+    "host": "10.21.1.7",
+    "user": "root",
+    "passwd": "aXR*5%f35fLuWN$r",
+    "db": "bux_operation_activity",
+    "port": 3306,
+    "charset": "utf8",
+    'use_unicode': True,
+}

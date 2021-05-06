@@ -1,13 +1,13 @@
 # Byte-compiled / optimized / DLL files
-__pycache__/
-*.py[cod]
-*$py.class
+#__pycache__/
+#*.py[cod]
+#*$py.class
 
 # C extensions
 *.so
 
 # Distribution / packaging
-.Python
+#.Python
 build/
 develop-eggs/
 dist/
@@ -47,9 +47,9 @@ htmlcov/
 nosetests.xml
 coverage.xml
 *.cover
-*.py,cover
+#*.py,cover
 .hypothesis/
-.pytest_cache/
+#.pytest_cache/
 
 # Translations
 *.mo
@@ -66,7 +66,7 @@ instance/
 .webassets-cache
 
 # Scrapy stuff:
-.scrapy
+#.scrapy
 
 # Sphinx documentation
 docs/_build/

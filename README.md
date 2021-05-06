@@ -38,7 +38,8 @@ python 股票分析
             - 位置：引擎和下载器之间
             - 作用：批量拦截到整个工程中所有的请求和相应
             - 拦截请求：
-                - UA伪装：process_request
-                - 代理IP:process_exception:return  request
+                - UA伪装：process_request（）
+                - 代理IP:process_exception（）:return  request
             - 拦截相应：
-                - 篡改响应数据，响应对象（动态加载页面）
+                - 篡改响应数据，响应对象（动态加载页面）:process_response（）方法里用selenium动态加载js
+                    - 安装selenium及浏览器驱动：pip install selenium  &&下载驱动 http://npm.taobao.org/mirrors/chromedriver/
