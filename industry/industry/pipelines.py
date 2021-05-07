@@ -4,19 +4,18 @@
 # See: https://docs.scrapy.org/en/latest/topics/item-pipeline.html
 
 
-# useful for handling different item types with a single interface
-from itemadapter import ItemAdapter
-import pymysql
+import datetime
 
-from .settings import MY_MYSQL_SETTINGS
 from pymysql import cursors
 # twisted 网络框架
 # API 接口
 from twisted.enterprise import adbapi
-import datetime
+
+# useful for handling different item types with a single interface
+from .settings import MY_MYSQL_SETTINGS
 
 
-class FirstbloodPipeline:
+class IndustryPipeline:
     # 从配置文件中读取配置
     @classmethod
     def from_settings(cls, settings):
@@ -33,16 +32,16 @@ class FirstbloodPipeline:
 
     def db_create(self, cursor):
         cursor.execute("""
-                    CREATE TABLE IF NOT EXISTS `industry_info` (
-                      `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '主键id',
-                      `name` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '行业名称',
-                      `code` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '行业编码',
-                      `link` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '行业跳转链接',
-                      `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
-                      `update_time` datetime NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
-                      PRIMARY KEY (`id`) USING BTREE
-                    ) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '行业信息' ROW_FORMAT = Dynamic;
-                    """)
+                       CREATE TABLE IF NOT EXISTS `industry_info` (
+                         `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '主键id',
+                         `name` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '行业名称',
+                         `code` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '行业编码',
+                         `link` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '行业跳转链接',
+                         `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
+                         `update_time` datetime NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+                         PRIMARY KEY (`id`) USING BTREE
+                       ) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '行业信息' ROW_FORMAT = Dynamic;
+                       """)
 
     def db_create_err(self, failure):
         print('---------------------------', failure)
@@ -73,5 +72,5 @@ class FirstbloodPipeline:
             code = link.split("/")[2].split('.')[0]
             name = industry_names[index]
             cursor.execute("""
-                           INSERT INTO industry_info (  `name`, `code`, `link`, `create_time` ) VALUES ( %s,%s,%s,%s)
-                           """, (name, code, link, datetime.datetime.now()))
+                              INSERT INTO industry_info (  `name`, `code`, `link`, `create_time` ) VALUES ( %s,%s,%s,%s)
+                              """, (name, code, link, datetime.datetime.now()))
