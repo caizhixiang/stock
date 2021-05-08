@@ -7,7 +7,16 @@ import scrapy
 
 
 class IndustryItem(scrapy.Item):
-    # define the fields for your item here like:
-    # name = scrapy.Field()
+    '''
+    行业数据
+    '''
+    industry_names = scrapy.Field()
+    industry_links = scrapy.Field()
+
+
+class IndustryCapitalItem(scrapy.Item):
+    '''
+    行业资金
+    '''
     industry_names = scrapy.Field()
     industry_links = scrapy.Field()

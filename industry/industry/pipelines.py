@@ -36,7 +36,8 @@ class IndustryPipeline:
                          `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '主键id',
                          `name` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '行业名称',
                          `code` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '行业编码',
-                         `link` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '行业跳转链接',
+                         `sector_link` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '行业板块（板块资金）',
+                         `quotation_link` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '行情（偏向资讯）',
                          `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
                          `update_time` datetime NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
                          PRIMARY KEY (`id`) USING BTREE
@@ -74,3 +75,16 @@ class IndustryPipeline:
             cursor.execute("""
                               INSERT INTO industry_info (  `name`, `code`, `link`, `create_time` ) VALUES ( %s,%s,%s,%s)
                               """, (name, code, link, datetime.datetime.now()))
+
+
+    def db_update(self, cursor, item):
+        print("添加数据========================")
+        industry_names = item['industry_names']
+        industry_links = item['industry_links']
+        for index in range(len(industry_names)):
+            link = industry_links[index]
+            code = link.split("/")[2].split('.')[0]
+            name = industry_names[index]
+            cursor.execute("""
+                                  INSERT INTO industry_info (  `name`, `code`, `link`, `create_time` ) VALUES ( %s,%s,%s,%s)
+                                  """, (name, code, link, datetime.datetime.now()))
