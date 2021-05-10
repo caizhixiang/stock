@@ -14,14 +14,17 @@ class IndustryCapitalSpider(scrapy.Spider):
 
     def parse(self, response):
         industry_names = []
-        industry_links = []
+        sector_links = []
+        quotation_links = []
         tr_list = response.xpath('//*[@id="dataview"]/div[2]/div[2]/table/tbody/tr')
         for tr in tr_list:
-            industry_links.append(tr.xpath('./td/a/@href').extract_first())
+            quotation_links.append(tr.xpath('./td/a/@href').extract_first())
+            sector_links.append(tr.xpath('./td/a/@href')[1].extract())
             industry_names.append(tr.xpath('./td/a/text()').extract_first())
 
         item = IndustryCapitalItem()
         item['industry_names'] = industry_names
-        item['industry_links'] = industry_links
+        item['sector_links'] = sector_links
+        item['quotation_links'] = quotation_links
 
         yield item

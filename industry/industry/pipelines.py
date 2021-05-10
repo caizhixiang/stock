@@ -67,24 +67,14 @@ class IndustryPipeline:
     def db_insert(self, cursor, item):
         print("添加数据========================")
         industry_names = item['industry_names']
-        industry_links = item['industry_links']
+        sector_links = item['sector_links']
+        quotation_links = item['quotation_links']
         for index in range(len(industry_names)):
-            link = industry_links[index]
-            code = link.split("/")[2].split('.')[0]
+            sector_link = "http://data.eastmoney.com" + sector_links[index]
+            code = sector_link.split("/")[2].split('.')[0]
             name = industry_names[index]
+            quotation_link = "http:" + quotation_links[index]
             cursor.execute("""
-                              INSERT INTO industry_info (  `name`, `code`, `link`, `create_time` ) VALUES ( %s,%s,%s,%s)
-                              """, (name, code, link, datetime.datetime.now()))
-
-
-    def db_update(self, cursor, item):
-        print("添加数据========================")
-        industry_names = item['industry_names']
-        industry_links = item['industry_links']
-        for index in range(len(industry_names)):
-            link = industry_links[index]
-            code = link.split("/")[2].split('.')[0]
-            name = industry_names[index]
-            cursor.execute("""
-                                  INSERT INTO industry_info (  `name`, `code`, `link`, `create_time` ) VALUES ( %s,%s,%s,%s)
-                                  """, (name, code, link, datetime.datetime.now()))
+                              INSERT INTO industry_info (  `name`, `code`, `sector_link`,`quotation_link`, `create_time`,`update_time` ) VALUES ( %s,%s,%s,%s,%s,%s)
+                              """,
+                           (name, code, sector_link, quotation_link, datetime.datetime.now(), datetime.datetime.now()))

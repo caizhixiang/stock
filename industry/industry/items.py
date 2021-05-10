@@ -19,4 +19,5 @@ class IndustryCapitalItem(scrapy.Item):
     行业资金
     '''
     industry_names = scrapy.Field()
-    industry_links = scrapy.Field()
+    quotation_links = scrapy.Field()
+    sector_links = scrapy.Field()

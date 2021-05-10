@@ -93,11 +93,12 @@ ITEM_PIPELINES = {
 
 # settings.py文件下添加mysql的配置信息
 MY_MYSQL_SETTINGS = {
-    "host": "10.21.1.7",
+    "host": "127.0.0.1",
     "user": "root",
-    "passwd": "aXR*5%f35fLuWN$r",
-    "db": "bux_operation_activity",
+    "passwd": "123456",
+    "db": "stock",
     "port": 3306,
     "charset": "utf8",
     'use_unicode': True,
+    'autocommit': True
 }
