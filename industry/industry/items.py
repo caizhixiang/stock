@@ -21,3 +21,17 @@ class IndustryCapitalItem(scrapy.Item):
     industry_names = scrapy.Field()
     quotation_links = scrapy.Field()
     sector_links = scrapy.Field()
+
+
+class SectorFundsItem(scrapy.Item):
+    '''
+    板块信息
+    '''
+    chg = scrapy.Field() #涨跌幅
+    turnover_rate=scrapy.Field() #换手率
+    rising_nums=scrapy.Field()#上涨家数
+    decliner_nums=scrapy.Field()#下跌家数
+    inflows=scrapy.Field()#资金净流入
+
+
+

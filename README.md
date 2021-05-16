@@ -43,3 +43,10 @@ python 股票分析
             - 拦截相应：
                 - 篡改响应数据，响应对象（动态加载页面）:process_response（）方法里用selenium动态加载js
                     - 安装selenium及浏览器驱动：pip install selenium  &&下载驱动 http://npm.taobao.org/mirrors/chromedriver/
+    
+    - CrawlSpider：类，Spider的一个子类。全站爬取
+        - 使用
+            - 创建一个工程
+            - cd xxx
+            - 创建爬虫文件（CrawlSpider）：
+                - scrapy genspider -t crawl xxx  www.xxx.com
