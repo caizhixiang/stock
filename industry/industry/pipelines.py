@@ -12,6 +12,7 @@ from pymysql import cursors
 from twisted.enterprise import adbapi
 
 # useful for handling different item types with a single interface
+from .items import SectorFundsItem
 from .settings import MY_MYSQL_SETTINGS
 
 
@@ -57,8 +58,11 @@ class IndustryPipeline:
     #     self.dbpool.close()
 
     def process_item(self, item, spider):
-        query = self.dbpool.runInteraction(self.db_insert, item)
-        query.addErrback(self.handle_error, item)
+        if (isinstance(item, SectorFundsItem)):
+            # 判断是否是SectorFundsItem
+            query = self.dbpool.runInteraction(self.do_funds_insert, item)
+            query.addErrback(self.handle_error, item)
+
         return item
 
     def handle_error(self, failure, item):
@@ -78,3 +82,26 @@ class IndustryPipeline:
                               INSERT INTO industry_info (  `name`, `code`, `sector_link`,`quotation_link`, `create_time`,`update_time` ) VALUES ( %s,%s,%s,%s,%s,%s)
                               """,
                            (name, code, sector_link, quotation_link, datetime.datetime.now(), datetime.datetime.now()))
+
+    def do_funds_insert(self, cursor, item):
+        print("添加数据========================")
+        chg_ = item['chg']
+        rate_ = item['turnover_rate']
+        nums_ = item['rising_nums']
+        decliner_nums_ = item['decliner_nums']
+
+        main_net_inflow = item['main_net_inflow']
+        industry_name_ = item['industry_name']
+        super_large_inflow = item['super_large_inflow']
+
+        large_inflow_ = item['large_inflow']
+
+        middle_inflow_ = item['middle_inflow']
+
+        small_inflow_ = item['small_inflow']
+        leading_stock_ = item['leading_stock']
+        cursor.execute("""
+INSERT INTO `stock`.`industry_sector_funds`(`industry_name`,`chg`, `turnover_rate`, `rising_nums`, `decliner_nums`, `leading_stock`, `main_net_inflow`, `super_large_inflow`, `large_inflow`, `middle_inflow`, `small_inflow`, `create_time`) VALUES ( %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s);                    """,
+                       (industry_name_, chg_, rate_, nums_, decliner_nums_, leading_stock_, main_net_inflow,
+                        super_large_inflow,
+                        large_inflow_, middle_inflow_, small_inflow_, datetime.datetime.now()))
