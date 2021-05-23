@@ -1,37 +1,28 @@
 import asyncio, logging
-import datetime
+from datetime import datetime
 
 import aiomysql
-from pymysql import Error
-
-# twisted 网络框架
-# API 接口
-from twisted.enterprise import adbapi
-
+from industry.settings import MY_MYSQL_SETTINGS
 
 def log(sql, args=()):
     logging.info('SQL: %s' % sql)
 
-
-def create_pool(dbpool):
+async def create_pool(loop, **kw):
     logging.info('create database connection pool...')
 
     global __pool
-    __pool = dbpool
-
-def db_create(self, cursor):
-    cursor.execute("""
-                   CREATE TABLE IF NOT EXISTS `industry_info` (
-                     `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '主键id',
-                     `name` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '行业名称',
-                     `code` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '行业编码',
-                     `sector_link` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '行业板块（板块资金）',
-                     `quotation_link` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '行情（偏向资讯）',
-                     `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
-                     `update_time` datetime NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
-                     PRIMARY KEY (`id`) USING BTREE
-                   ) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '行业信息' ROW_FORMAT = Dynamic;
-                   """)
+    __pool = await aiomysql.create_pool(
+        host=MY_MYSQL_SETTINGS.get("host"),
+        port=MY_MYSQL_SETTINGS.get('port'),
+        user=MY_MYSQL_SETTINGS.get('user'),
+        password=MY_MYSQL_SETTINGS.get('passwd'),
+        db=MY_MYSQL_SETTINGS.get('db'),
+        charset=kw.get('charset', 'utf8'),
+        autocommit=kw.get('autocommit', True),
+        maxsize=kw.get('maxsize', 10),
+        minsize=kw.get('minsize', 1)
+        # loop=loop
+    )
 
 async def select(sql, args, size=None):
     log(sql, args)
@@ -46,7 +37,6 @@ async def select(sql, args, size=None):
         logging.info('rows returned: %s' % len(rs))
         return rs
 
-
 async def execute(sql, args, autocommit=True):
     log(sql)
     async with __pool.get() as conn:
@@ -54,7 +44,7 @@ async def execute(sql, args, autocommit=True):
             await conn.begin()
         try:
             async with conn.cursor(aiomysql.DictCursor) as cur:
-                await cur.execute(sql.replace('?', '%s'), args)
+                await cur.execute(sql.replace('?','%s'), args)
                 affected = cur.rowcount
             if not autocommit:
                 await conn.commit()
@@ -64,13 +54,11 @@ async def execute(sql, args, autocommit=True):
             raise
         return affected
 
-
 def create_args_string(num):
     L = []
     for n in range(num):
         L.append('?')
     return ', '.join(L)
-
 
 class Field(object):
 
@@ -117,7 +105,7 @@ class TextField(Field):
 class DateField(Field):
 
     def __init__(self, name=None, default=None):
-        super().__init__(name, 'datetime', False, datetime.datetime)
+        super().__init__(name, 'datetime', False, default)
 
 
 class ModelMetaclass(type):
@@ -137,12 +125,12 @@ class ModelMetaclass(type):
                 if v.primary_key:
                     # 找到主键:
                     if primaryKey:
-                        raise Error('Duplicate primary key for field: %s' % k)
+                        raise StandardError('Duplicate primary key for field: %s' % k)
                     primaryKey = k
                 else:
                     fields.append(k)
         if not primaryKey:
-            raise Error('Primary key not found.')
+            raise StandardError('Primary key not found.')
         for k in mappings.keys():
             attrs.pop(k)
         escaped_fields = list(map(lambda f: '`%s`' % f, fields))
