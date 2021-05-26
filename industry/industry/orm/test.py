@@ -1,31 +1,18 @@
-from twisted.enterprise import adbapi
-from twisted.internet import reactor
+from sqlalchemy import create_engine, MetaData
+from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.orm import sessionmaker, scoped_session
 
-from industry.settings import MY_MYSQL_SETTINGS
-from pymysql import cursors
+from industry.orm.models import IndustryInfo
 
+engine = create_engine('mysql+pymysql://root:123456@localhost/stock')
 
-class orm(object):
-    def __init__(self, dbpool):
-        self.dbpool = dbpool
-        self.dicc = []
+DBsession = sessionmaker(bind=engine)
+dbsession = scoped_session(DBsession)
 
-    def getAge(self, id):
-        query = self.dbpool.runQuery("SELECT * FROM industry_info WHERE id = %s", id)
-        return query.addCallbacks(self.printResult)
+meta_data = MetaData(bind=engine)
 
-    def printResult(self, l):
-        for item in l:
-            print(item)
-            self.dicc.append(item['id'])
+Base = declarative_base()
 
-
-asyn_mysql_settings = MY_MYSQL_SETTINGS
-asyn_mysql_settings['cursorclass'] = cursors.DictCursor
-dbpool = adbapi.ConnectionPool("pymysql", **asyn_mysql_settings)
-o = orm(dbpool)
-o.getAge(1)
-reactor.callLater(4, reactor.stop)
-reactor.run()
-print('-------------')
-print(o.dicc)
+if __name__ == '__main__':
+    info__all = dbsession.query(IndustryInfo).filter(IndustryInfo.id == 1).all()
+    print(info__all)

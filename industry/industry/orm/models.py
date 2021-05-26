@@ -1,20 +1,12 @@
-'''
-Models for user
-'''
+from sqlalchemy import create_engine, Table, MetaData
+from sqlalchemy.ext.declarative import declarative_base
 
-__author__ = 'caizhixiang'
+engine = create_engine('mysql+pymysql://root:123456@localhost/stock')
 
-from .orm import Model, IntegerField, StringField, DateField
+meta_data = MetaData(bind=engine)
+
+Base = declarative_base()
 
 
-class IndustryInfo(Model):
-    __table__ = 'industry_info'
-
-    id = IntegerField(primary_key=True)
-    name = StringField(ddl='varchar(50)')
-    code = StringField(ddl='varchar(50)')
-    sector_link = StringField(ddl='varchar(255)')
-    quotation_link = StringField(ddl='varchar(255)')
-    create_time = DateField()
-    update_time = DateField()
-
+class IndustryInfo(Base):
+    __table__ = Table('industry_info', meta_data, autoload=True)
