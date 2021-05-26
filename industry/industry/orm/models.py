@@ -5,8 +5,8 @@ engine = create_engine('mysql+pymysql://root:123456@localhost/stock')
 
 meta_data = MetaData(bind=engine)
 
-Base = declarative_base()
 
+Base = declarative_base()
 
 class IndustryInfo(Base):
     __table__ = Table('industry_info', meta_data, autoload=True)
