@@ -11,5 +11,10 @@ Base = declarative_base()
 class IndustryInfo(Base):
     __table__ = Table('industry_info', meta_data, autoload=True)
 
+
 class IndustrySectorFunds(Base):
     __table__ = Table('industry_sector_funds', meta_data, autoload=True)
+
+
+class IndustryStock(Base):
+    __table__ = Table('industry_stock', meta_data, autoload=True)

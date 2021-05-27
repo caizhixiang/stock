@@ -45,6 +45,10 @@ class PlateSpider(scrapy.Spider):
 
         for url in url_set:
             yield scrapy.Request(url, callback=self.parse_large_order_details)
+            yield scrapy.Request(url, callback=self.parse_stock_details)
+
+        # for url in url_set:
+        #     yield scrapy.Request(url, callback=self.parse_stock_details)
 
     def parse_large_order_details(self, response):
         # print(response)
@@ -76,6 +80,10 @@ class PlateSpider(scrapy.Spider):
         item['small_inflow'] = self.convert2W(funds_tr_res.xpath('./tr[5]/td[3]/span/text()').extract_first())
 
         yield item
+
+    def parse_stock_details(self, response):
+
+        print(response)
 
     def convert2W(self, funds):
         if (funds.rfind('万') != -1):
