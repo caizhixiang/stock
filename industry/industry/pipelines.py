@@ -1,72 +1,24 @@
-# Define your item pipelines here
-#
-# Don't forget to add your pipeline to the ITEM_PIPELINES setting
-# See: https://docs.scrapy.org/en/latest/topics/item-pipeline.html
-
-
 import datetime
 
-from pymysql import cursors
-# twisted 网络框架
-# API 接口
-from twisted.enterprise import adbapi
-
-# useful for handling different item types with a single interface
 from .items import SectorFundsItem
-from .settings import MY_MYSQL_SETTINGS
+from .orm.models import IndustrySectorFunds, IndustryInfo
+from .orm.orm import save
 
 
 class IndustryPipeline:
-    # 从配置文件中读取配置
-    @classmethod
-    def from_settings(cls, settings):
-        asyn_mysql_settings = MY_MYSQL_SETTINGS
-        asyn_mysql_settings['cursorclass'] = cursors.DictCursor
-        dbpool = adbapi.ConnectionPool("pymysql", **asyn_mysql_settings)
-        return cls(dbpool)
-
-    def __init__(self, dbpool):
-        self.dbpool = dbpool
-
-        query = self.dbpool.runInteraction(self.db_create)
-        query.addErrback(self.db_create_err)
-
-    def db_create(self, cursor):
-        cursor.execute("""
-                       CREATE TABLE IF NOT EXISTS `industry_info` (
-                         `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '主键id',
-                         `name` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '行业名称',
-                         `code` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '行业编码',
-                         `sector_link` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '行业板块（板块资金）',
-                         `quotation_link` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '行情（偏向资讯）',
-                         `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
-                         `update_time` datetime NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
-                         PRIMARY KEY (`id`) USING BTREE
-                       ) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '行业信息' ROW_FORMAT = Dynamic;
-                       """)
-
-    def db_create_err(self, failure):
-        print('---------------------------', failure)
-
-    # def open_spider(self, spider):
-    #     self.dbpool = dbpool
-    #
-    #     query = self.dbpool.runInteraction(self.db_create)
-    #     query.addErrback(self.db_create_err)
-
-    # def close_spider(self, spider):
-    #     self.dbpool.close()
 
     def process_item(self, item, spider):
         if (isinstance(item, SectorFundsItem)):
             # 判断是否是SectorFundsItem
-            query = self.dbpool.runInteraction(self.do_funds_insert, item)
-            query.addErrback(self.handle_error, item)
+            self.do_funds_insert(item)
 
         return item
 
-    def handle_error(self, failure, item):
-        print('============================', failure, item)
+
+
+
+
+
 
     def db_insert(self, cursor, item):
         print("添加数据========================")
@@ -78,30 +30,24 @@ class IndustryPipeline:
             code = sector_link.split("/")[2].split('.')[0]
             name = industry_names[index]
             quotation_link = "http:" + quotation_links[index]
-            cursor.execute("""
-                              INSERT INTO industry_info (  `name`, `code`, `sector_link`,`quotation_link`, `create_time`,`update_time` ) VALUES ( %s,%s,%s,%s,%s,%s)
-                              """,
-                           (name, code, sector_link, quotation_link, datetime.datetime.now(), datetime.datetime.now()))
+            save(IndustryInfo(name=name,
+                              code=code,
+                              sector_link=sector_link,
+                              quotation_link=quotation_link,
+                              create_time=datetime.datetime.now(),
+                              update_time=datetime.datetime.now()))
 
-    def do_funds_insert(self, cursor, item):
+    def do_funds_insert(self, item):
         print("添加数据========================")
-        chg_ = item['chg']
-        rate_ = item['turnover_rate']
-        nums_ = item['rising_nums']
-        decliner_nums_ = item['decliner_nums']
-
-        main_net_inflow = item['main_net_inflow']
-        industry_name_ = item['industry_name']
-        super_large_inflow = item['super_large_inflow']
-
-        large_inflow_ = item['large_inflow']
-
-        middle_inflow_ = item['middle_inflow']
-
-        small_inflow_ = item['small_inflow']
-        leading_stock_ = item['leading_stock']
-        cursor.execute("""
-INSERT INTO `stock`.`industry_sector_funds`(`industry_name`,`chg`, `turnover_rate`, `rising_nums`, `decliner_nums`, `leading_stock`, `main_net_inflow`, `super_large_inflow`, `large_inflow`, `middle_inflow`, `small_inflow`, `create_time`) VALUES ( %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s);                    """,
-                       (industry_name_, chg_, rate_, nums_, decliner_nums_, leading_stock_, main_net_inflow,
-                        super_large_inflow,
-                        large_inflow_, middle_inflow_, small_inflow_, datetime.datetime.now()))
+        save(IndustrySectorFunds(industry_name=item['industry_name'],
+                                 chg=item['chg'],
+                                 turnover_rate=item['turnover_rate'],
+                                 rising_nums=item['rising_nums'],
+                                 decliner_nums=item['decliner_nums'],
+                                 leading_stock=item['leading_stock'],
+                                 main_net_inflow=item['main_net_inflow'],
+                                 super_large_inflow=item['super_large_inflow'],
+                                 large_inflow=item['large_inflow'],
+                                 middle_inflow=item['middle_inflow'],
+                                 small_inflow=item['small_inflow'],
+                                 create_time=datetime.datetime.now()))

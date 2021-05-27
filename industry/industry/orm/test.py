@@ -11,11 +11,13 @@ def save(Base):
     session.add(Base)
     session.commit()
 
+#
+# def update(Base):
+#     session.query(Base).filter()
 
 if __name__ == '__main__':
-    # info__all = session.query(IndustryInfo).filter(IndustryInfo.id == 1).all()
+    # info__all = session.query(IndustryInfo).filter(IndustryInfo.id == 1).first()
     # print(info__all)
     industry_info = IndustryInfo(name='shishi', code='dd')
-    # session.add(industry_info)
-    # session.commit()
+
     save(industry_info)

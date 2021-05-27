@@ -75,7 +75,7 @@ class PlateSpider(scrapy.Spider):
 
         item['small_inflow'] = self.convert2W(funds_tr_res.xpath('./tr[5]/td[3]/span/text()').extract_first())
 
-        return item
+        yield item
 
     def convert2W(self, funds):
         if (funds.rfind('万') != -1):
