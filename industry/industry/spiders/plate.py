@@ -4,7 +4,7 @@ import scrapy
 from selenium.webdriver import Chrome
 from selenium.webdriver.support.wait import WebDriverWait
 
-from industry.items import SectorFundsItem
+from industry.items import SectorFundsItem, IndustryStockItem
 
 
 class PlateSpider(scrapy.Spider):
@@ -45,13 +45,13 @@ class PlateSpider(scrapy.Spider):
 
         for url in url_set:
             yield scrapy.Request(url, callback=self.parse_large_order_details)
-            yield scrapy.Request(url, callback=self.parse_stock_details)
 
         # for url in url_set:
         #     yield scrapy.Request(url, callback=self.parse_stock_details)
 
     def parse_large_order_details(self, response):
         # print(response)
+        # 行业
         tr_res = response.xpath('/html/body/div[1]/div[8]/div[2]/div[3]/table/tbody/tr[2]')
         # symbol = tr_res.xpath('./td[3]/span/@class').extract_first()
 
@@ -81,8 +81,21 @@ class PlateSpider(scrapy.Spider):
 
         yield item
 
-    def parse_stock_details(self, response):
+        # 股票tr
+        tr_stocks = response.xpath('//*[@id="dataview"]/div[2]/div[2]/table/tbody/tr')
+        for tr_stock in tr_stocks:
+            stock_code = tr_stock.xpath('./td[2]/a/text()').extract_first()
+            stock_name = tr_stock.xpath('./td[3]/a/text()').extract_first()
+            stock_detail_url = tr_stock.xpath('./td[3]/a/@href').extract_first()
+            stock_item = IndustryStockItem()
+            stock_item['stock_code'] = stock_code
+            stock_item['stock_name'] = stock_name
+            stock_item['stock_detail_url'] = stock_detail_url
+            stock_item['industry_name'] = item['industry_name']
+            yield stock_item
 
+    def parse_stock_details(self, response):
+        response.text
         print(response)
 
     def convert2W(self, funds):

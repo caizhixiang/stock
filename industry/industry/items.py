@@ -38,3 +38,14 @@ class SectorFundsItem(scrapy.Item):
     small_inflow = scrapy.Field()  # 小单净流入
     leading_stock = scrapy.Field()  # 领涨股
     industry_name = scrapy.Field()  # 板块名称
+
+
+class IndustryStockItem(scrapy.Item):
+    '''
+    板块——股票信息
+    '''
+
+    stock_code = scrapy.Field()
+    stock_name = scrapy.Field()
+    stock_detail_url = scrapy.Field()
+    industry_name = scrapy.Field()
