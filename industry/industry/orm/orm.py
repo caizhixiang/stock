@@ -8,3 +8,4 @@ session = DBsession()
 def save(Base):
     session.add(Base)
     session.commit()
+
