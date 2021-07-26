@@ -6,6 +6,9 @@ from industry.items import IndustryCapitalItem
 
 
 class IndustryCapitalSpider(scrapy.Spider):
+    '''
+    行业资金流入情况
+    '''
     name = 'industry_capital'
     start_urls = ['http://data.eastmoney.com/bkzj/hy.html']
 

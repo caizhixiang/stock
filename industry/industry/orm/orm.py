@@ -9,3 +9,5 @@ def save(Base):
     session.add(Base)
     session.commit()
 
+def queryAll(Obj):
+    return session.query(Obj).all()

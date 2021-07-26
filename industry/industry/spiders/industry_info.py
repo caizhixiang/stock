@@ -5,6 +5,9 @@ from industry.items import IndustryItem
 
 
 class IndustryInfoSpider(scrapy.Spider):
+    '''
+    行业信息数据
+    '''
     name = 'industry_info'
     # allowed_domains = ['example.com']
     start_urls = ['http://data.eastmoney.com/bkzj/hy.html']

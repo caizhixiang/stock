@@ -8,7 +8,7 @@ class IndustryPipeline:
     def process_item(self, item, spider):
         if (isinstance(item, SectorFundsItem)):
             # 判断是否是SectorFundsItem
-            IndustrySectorFundsDao.save(item)
+            IndustrySectorFundsDao().save(item)
             # print(item)
         elif (isinstance(item, IndustryStockItem)):
             IndustryStockDao.save(item)

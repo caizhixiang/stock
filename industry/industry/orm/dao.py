@@ -2,7 +2,7 @@ from datetime import datetime
 
 from industry.utils.util import ObjDictTool, PinyinTool
 from industry.orm.models import IndustrySectorFunds, IndustryInfo, IndustryStock
-from industry.orm.orm import save
+from industry.orm.orm import save,queryAll
 
 
 class IndustryInfoDao:
@@ -24,8 +24,12 @@ class IndustryInfoDao:
                               code=code,
                               sector_link=sector_link,
                               quotation_link=quotation_link,
-                              create_time=datetime.datetime.now(),
-                              update_time=datetime.datetime.now()))
+                              create_time=datetime.now(),
+                              update_time=datetime.now()))
+
+    def findAll(self):
+        return queryAll(IndustryInfo)
+
 
 
 class IndustrySectorFundsDao:
@@ -42,7 +46,7 @@ class IndustrySectorFundsDao:
         print("添加数据========================")
         funds = IndustrySectorFunds()
         ObjDictTool.to_obj(obj=funds, **item)
-        funds.__setattr__('create_time', datetime.datetime.now())
+        funds.__setattr__('create_time', datetime.now())
         save(funds)
 
 
@@ -60,6 +64,6 @@ class IndustryStockDao:
         print("添加数据========================")
         stock = IndustryStock()
         ObjDictTool.to_obj(obj=stock, **item)
-        stock.__setattr__('create_time', datetime.datetime.now())
+        stock.__setattr__('create_time', datetime.now())
         stock.__setattr__('abridge', PinyinTool.getPinyinAbridge(stock.__getattribute__('stock_name')))
         save(stock)
