@@ -5,12 +5,12 @@ import sys
 if __name__ == '__main__':
     sys.path.append(os.path.dirname(os.path.abspath(__file__)))
     # 行业信息
-    # execute(['scrapy', 'crawl', 'industry_info'])
+    execute(['scrapy', 'crawl', 'industry_info'])
 
     # 行业资金（不分页）
     # execute(['scrapy', 'crawl', 'industry_capital'])
 
     # 行业资金（分页）
     # execute(['scrapy', 'crawl', 'sector_funds'])
-    execute(['scrapy', 'crawl', 'sector_quotation'])
+    # execute(['scrapy', 'crawl', 'sector_quotation'])
     # execute(['scrapy', 'crawl', 'plate'])
