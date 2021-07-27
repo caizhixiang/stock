@@ -13,16 +13,16 @@ class IndustryInfoDao:
     def save(self, item):
         print("添加数据========================")
         industry_names = item['industry_names']
-        sector_links = item['sector_links']
+        industry_links = item['industry_links']
+        # sector_links = item['sector_links']
         # quotation_links = item['quotation_links']
-        for index in range(len(industry_names)):
-            sector_link = "http://data.eastmoney.com" + sector_links[index]
-            code = sector_link.split("/")[2].split('.')[0]
-            name = industry_names[index]
+        for name,link in zip(industry_names,industry_links):
+
+            code = link[link.rfind(".")+1:]
             # quotation_link = "http:" + quotation_links[index]
             save(IndustryInfo(name=name,
                               code=code,
-                              sector_link=sector_link,
+                              # sector_link=sector_link,
                               # quotation_link=quotation_link,
                               create_time=datetime.now(),
                               update_time=datetime.now()))
