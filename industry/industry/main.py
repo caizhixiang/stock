@@ -13,5 +13,9 @@ if __name__ == '__main__':
     # 行业资金（分页）
     # execute(['scrapy', 'crawl', 'sector_funds'])
     # 2、行情
-    execute(['scrapy', 'crawl', 'sector_quotation'])
+    # execute(['scrapy', 'crawl', 'sector_quotation'])
+    # 3、指数
+    execute(['scrapy', 'crawl', 'stock_market'])
+
+
     # execute(['scrapy', 'crawl', 'plate'])
