@@ -1,7 +1,7 @@
 from datetime import datetime
 
 from industry.utils.util import ObjDictTool, PinyinTool
-from industry.orm.models import IndustrySectorFunds, IndustryInfo, IndustryStock
+from industry.orm.models import IndustrySectorFunds, IndustryInfo, IndustryStock, StockMarket
 from industry.orm.orm import save,queryAll
 
 
@@ -67,3 +67,20 @@ class IndustryStockDao:
         stock.__setattr__('create_time', datetime.now())
         stock.__setattr__('abridge', PinyinTool.getPinyinAbridge(stock.__getattribute__('stock_name')))
         save(stock)
+
+class StockMarketDao:
+    '''
+    行业股票信息
+    '''
+
+    def save(self, item):
+        '''
+        保存板块-股票信息
+        :param item:
+        :return:
+        '''
+        print("添加数据========================")
+        stockMarket = StockMarket()
+        ObjDictTool.to_obj(obj=stockMarket, **item)
+        stockMarket.__setattr__('create_time', datetime.now())
+        save(stockMarket)
