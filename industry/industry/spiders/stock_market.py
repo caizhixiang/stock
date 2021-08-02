@@ -10,13 +10,7 @@ class StockMarketSpider(scrapy.Spider):
 
     http://quote.eastmoney.com/concept/sh603259.html#(个股行情)
 
-    上证日k全屏
-    http://quote.eastmoney.com/zs000001.html#fullScreenChart
-    2021.02.01以来的大盘涨跌幅
-    http://61.push2his.eastmoney.com/api/qt/stock/kline/get?cb=jQuery331020473188151630217_1627747598798&secid=1.000001&ut=fa5fd1943c7b386f172d6893dbfba10b&fields1=f1%2Cf2%2Cf3%2Cf4%2Cf5%2Cf6&fields2=f51%2Cf52%2Cf53%2Cf54%2Cf55%2Cf56%2Cf57%2Cf58%2Cf59%2Cf60%2Cf61&klt=101&fqt=1&end=20500101&lmt=120&_=1627747598805
-    历史所有日期的大盘涨跌幅
-    http://9.push2his.eastmoney.com/api/qt/stock/kline/get?cb=jQuery331020473188151630217_1627747598798&secid=1.000001&ut=fa5fd1943c7b386f172d6893dbfba10b&fields1=f1%2Cf2%2Cf3%2Cf4%2Cf5%2Cf6&fields2=f51%2Cf52%2Cf53%2Cf54%2Cf55%2Cf56%2Cf57%2Cf58%2Cf59%2Cf60%2Cf61&klt=101&fqt=1&beg=0&end=20500101&smplmt=987&lmt=1000000&_=1627747598804
-    '''
+     '''
     name = 'stock_market'
     start_urls = [
         'http://quote.eastmoney.com/zs000001.html',  # 沪市
@@ -30,6 +24,7 @@ class StockMarketSpider(scrapy.Spider):
 
     def parse(self, response):
         print(response)
+
         # 大盘指数
         item = StockMarketItem()
 
@@ -48,11 +43,11 @@ class StockMarketSpider(scrapy.Spider):
 
         item['inner'] = self.cutOutTail(response.xpath('//*[@id="rgt11"]/text()').extract_first())  # 万手
         item['outer'] = self.cutOutTail(response.xpath('//*[@id="rgt12"]/text()').extract_first())  # 万手
-        item['amplitude'] = self.cutOutTail(response.xpath('//*[@id="rgt13"]/text()').extract_first())  #振幅
-        item['rising_nums'] = self.cutOutTail(response.xpath('//*[@id="rgt14"]/text()').extract_first())   #家
+        item['amplitude'] = self.cutOutTail(response.xpath('//*[@id="rgt13"]/text()').extract_first())  # 振幅
+        item['rising_nums'] = self.cutOutTail(response.xpath('//*[@id="rgt14"]/text()').extract_first())  # 家
 
-        item['decliner_nums'] = self.cutOutTail(response.xpath('//*[@id="rgt15"]/text()').extract_first())   #家
-        item['flat_nums'] = self.cutOutTail(response.xpath('//*[@id="rgt16"]/text()').extract_first())   #家
+        item['decliner_nums'] = self.cutOutTail(response.xpath('//*[@id="rgt15"]/text()').extract_first())  # 家
+        item['flat_nums'] = self.cutOutTail(response.xpath('//*[@id="rgt16"]/text()').extract_first())  # 家
 
         # 资金流入情况
         item['main_inflow'] = self.convert2Y(response.xpath('//*[@id="hz_a"]/text()').extract_first())  # 主力流入 亿元

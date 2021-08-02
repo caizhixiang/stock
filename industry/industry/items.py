@@ -46,13 +46,14 @@ class SectorFundsItem(scrapy.Item):
     decliner_nums = scrapy.Field()  # '下跌家数',
     flat_nums = scrapy.Field()  # '平家数',
     leading_stock = scrapy.Field()  # '领涨股票',
-    main_inflow=scrapy.Field()  #主力流入
-    main_outflow=scrapy.Field() #主流流出
+    main_inflow = scrapy.Field()  # 主力流入
+    main_outflow = scrapy.Field()  # 主流流出
     main_net_inflow = scrapy.Field()  # '主力资金净流入',
     super_large_inflow = scrapy.Field()  # '超级大单资金净流入',
     large_inflow = scrapy.Field()  # '大单净流入',
     middle_inflow = scrapy.Field()  # '中单净流入',
     small_inflow = scrapy.Field()  # '小单净流入',
+
 
 class StockMarketItem(scrapy.Item):
     '''
@@ -77,16 +78,14 @@ class StockMarketItem(scrapy.Item):
     decliner_nums = scrapy.Field()  # '下跌家数',
     flat_nums = scrapy.Field()  # '平家数',
     leading_stock = scrapy.Field()  # '领涨股票',
-    main_inflow=scrapy.Field()  #主力流入
-    main_outflow=scrapy.Field() #主流流出
+    main_inflow = scrapy.Field()  # 主力流入
+    main_outflow = scrapy.Field()  # 主流流出
     main_net_inflow = scrapy.Field()  # '主力资金净流入',
     super_large_inflow = scrapy.Field()  # '超级大单资金净流入',
     large_inflow = scrapy.Field()  # '大单净流入',
     middle_inflow = scrapy.Field()  # '中单净流入',
     small_inflow = scrapy.Field()  # '小单净流入',
-
-
-
+    creat_time = scrapy.Field()
 
 
 class IndustryStockItem(scrapy.Item):
