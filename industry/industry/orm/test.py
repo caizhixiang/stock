@@ -1,3 +1,4 @@
+import shutil,os
 # from sqlalchemy import create_engine, MetaData
 # from sqlalchemy.ext.declarative import declarative_base
 # from sqlalchemy.orm import sessionmaker, scoped_session
@@ -92,4 +93,7 @@ def getPinyin(string):
     return  ''.join(charLst)
 
 if __name__=='__main__':
-    print(getPinyin('中南重工'))
+    # print(getPinyin('中南重工'))
+
+    shutil.rmtree(r'C:\Users\surface\Downloads\kibana-7.6.1-windows-x86_64')
+    # os.mkdir('C:\Program Files (x86)\WnPDFReader')
