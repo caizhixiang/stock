@@ -1,3 +1,7 @@
+# git
+git config --global http.sslVerify "false"
+
+
 # stock
 python 股票分析
 ----scrapy爬虫框架

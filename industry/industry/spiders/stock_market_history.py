@@ -22,8 +22,9 @@ class StockMarketHistorySpider(scrapy.Spider):
     name = 'stock_market_history'
     start_urls = [
 
-        'http://61.push2his.eastmoney.com/api/qt/stock/kline/get?cb=jQuery331020473188151630217_1627747598798&secid=1.000001&ut=fa5fd1943c7b386f172d6893dbfba10b&fields1=f1%2Cf2%2Cf3%2Cf4%2Cf5%2Cf6&fields2=f51%2Cf52%2Cf53%2Cf54%2Cf55%2Cf56%2Cf57%2Cf58%2Cf59%2Cf60%2Cf61&klt=101&fqt=1&end=20500101&lmt=120&_=1627747598805'
-
+        'http://61.push2his.eastmoney.com/api/qt/stock/kline/get?cb=jQuery331020473188151630217_1627747598798&secid=1.000001&ut=fa5fd1943c7b386f172d6893dbfba10b&fields1=f1%2Cf2%2Cf3%2Cf4%2Cf5%2Cf6&fields2=f51%2Cf52%2Cf53%2Cf54%2Cf55%2Cf56%2Cf57%2Cf58%2Cf59%2Cf60%2Cf61&klt=101&fqt=1&end=20500101&lmt=120&_=1627747598805',
+        'http://61.push2his.eastmoney.com/api/qt/stock/kline/get?cb=jQuery331015377060240125662_1628009757174&secid=0.399001&ut=fa5fd1943c7b386f172d6893dbfba10b&fields1=f1%2Cf2%2Cf3%2Cf4%2Cf5%2Cf6&fields2=f51%2Cf52%2Cf53%2Cf54%2Cf55%2Cf56%2Cf57%2Cf58%2Cf59%2Cf60%2Cf61&klt=101&fqt=1&end=20500101&lmt=120&_=1628009757177',
+        'http://79.push2his.eastmoney.com/api/qt/stock/kline/get?cb=jQuery331037213942820989954_1628009913421&secid=0.399006&ut=fa5fd1943c7b386f172d6893dbfba10b&fields1=f1%2Cf2%2Cf3%2Cf4%2Cf5%2Cf6&fields2=f51%2Cf52%2Cf53%2Cf54%2Cf55%2Cf56%2Cf57%2Cf58%2Cf59%2Cf60%2Cf61&klt=101&fqt=1&end=20500101&lmt=120&_=1628009913424'
     ]
 
     def __init__(self, *args, **kwargs):
