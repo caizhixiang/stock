@@ -62,8 +62,8 @@ class StockMarketHistorySpider(scrapy.Spider):
             item['low'] = kline_split[4]
             # item['preclose'] = response.xpath('tr[1]/td[2]/span/text()').extract_first()
             item['pctChg'] = kline_split[8]  # 涨跌幅
-            item['volume'] = self.str_of_num(kline_split[5])  # 成交量 ->亿手
-            item['amount'] = self.str_of_num(kline_split[6])  # 成交额  ->亿元
+            item['volume'] = self.str_of_num(float(kline_split[5]))  # 成交量 ->亿手
+            item['amount'] = self.str_of_num(float(kline_split[6]))  # 成交额  ->亿元
             item['amplitude'] = kline_split[7]  # 振幅
             item['turn'] = kline_split[10]  #
             # item['peTTM'] = self.cutOutTail(response.xpath('//*[@id="rgt10"]/text()').extract_first())  # 流动市值  万亿

@@ -14,8 +14,9 @@ if __name__ == '__main__':
     # execute(['scrapy', 'crawl', 'sector_funds'])
     # 2、行情
     # execute(['scrapy', 'crawl', 'sector_quotation'])
-    # 3、指数
+    # 3.1、当前指数
     # execute(['scrapy', 'crawl', 'stock_market'])
+    # 3.2、历史指数
     execute(['scrapy', 'crawl', 'stock_market_history'])
 
 
