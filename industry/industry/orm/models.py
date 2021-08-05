@@ -17,7 +17,7 @@ class IndustrySectorFunds(Base):
 
 
 class IndustryStock(Base):
-    __table__ = Table('industry_stock', meta_data, autoload=True)
+    __table__ = Table('stock_info', meta_data, autoload=True)
 
 
 class StockMarket(Base):

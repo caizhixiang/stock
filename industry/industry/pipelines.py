@@ -1,4 +1,4 @@
-from .items import SectorFundsItem, IndustryStockItem, IndustryItem, StockMarketItem
+from .items import SectorFundsItem, StockInfoItem, IndustryItem, StockMarketItem
 
 from orm.dao import IndustrySectorFundsDao, IndustryStockDao, IndustryInfoDao, StockMarketDao
 
@@ -10,7 +10,7 @@ class IndustryPipeline:
             # 判断是否是SectorFundsItem
             IndustrySectorFundsDao().save(item)
             # print(item)
-        elif (isinstance(item, IndustryStockItem)):
+        elif (isinstance(item, StockInfoItem)):
             IndustryStockDao.save(item)
         elif (isinstance(item,IndustryItem)):
             IndustryInfoDao().save(item)

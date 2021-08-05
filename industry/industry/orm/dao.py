@@ -3,7 +3,6 @@ from datetime import datetime
 from industry.orm.models import IndustrySectorFunds, IndustryInfo, IndustryStock, StockMarket
 from industry.orm.orm import save, queryAll
 from industry.utils.util import ObjDictTool, PinyinTool
-from orm import DBsession
 
 
 class IndustryInfoDao:
@@ -81,18 +80,18 @@ class StockMarketDao:
         '''
         print("添加数据========================")
         # 先根据日期和code查询有没有记录，没有则新增，有则更新
-        session=DBsession()
-        data = session.query(StockMarket).filter_by(market_code=item['market_code'],
-                                                    create_time=item['creat_time']).first()
-        if data:
-            {setattr(data, k, v) for k, v in item.items()}
-            print(data)
-        else:
-            stockMarket = StockMarket()
-            ObjDictTool.to_obj(obj=stockMarket, **item)
-            create_time = item["creat_time"]
-            time_split = create_time.split("-")
-
-            date_time = datetime(int(time_split[0]), month=int(time_split[1]), day=int(time_split[2]), hour=15)
-            stockMarket.__setattr__('create_time', date_time)
-            save(stockMarket)
+        # session=DBsession()
+        # data = session.query(StockMarket).filter_by(market_code=item['market_code'],
+        #                                             create_time=item['creat_time']).first()
+        # if data:
+        #     {setattr(data, k, v) for k, v in item.items()}
+        #     print(data)
+        # else:
+        #     stockMarket = StockMarket()
+        #     ObjDictTool.to_obj(obj=stockMarket, **item)
+        #     create_time = item["creat_time"]
+        #     time_split = create_time.split("-")
+        #
+        #     date_time = datetime(int(time_split[0]), month=int(time_split[1]), day=int(time_split[2]), hour=15)
+        #     stockMarket.__setattr__('create_time', date_time)
+        #     save(stockMarket)

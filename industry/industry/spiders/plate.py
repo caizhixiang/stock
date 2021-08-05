@@ -5,7 +5,7 @@ from selenium.webdriver import Chrome
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.wait import WebDriverWait
 
-from industry.items import SectorFundsItem, IndustryStockItem
+from industry.items import SectorFundsItem, StockInfoItem
 from industry.utils.util import SpiderTool
 
 

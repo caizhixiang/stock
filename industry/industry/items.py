@@ -88,7 +88,7 @@ class StockMarketItem(scrapy.Item):
     creat_time = scrapy.Field()
 
 
-class IndustryStockItem(scrapy.Item):
+class StockInfoItem(scrapy.Item):
     '''
     板块——股票信息
     '''

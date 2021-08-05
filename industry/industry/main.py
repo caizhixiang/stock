@@ -17,7 +17,10 @@ if __name__ == '__main__':
     # 3.1、当前指数
     # execute(['scrapy', 'crawl', 'stock_market'])
     # 3.2、历史指数
-    execute(['scrapy', 'crawl', 'stock_market_history'])
+    # execute(['scrapy', 'crawl', 'stock_market_history'])
 
+
+    # 4 股票信息
+    execute(['scrapy', 'crawl', 'stock_info'])
 
     # execute(['scrapy', 'crawl', 'plate'])
