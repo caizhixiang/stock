@@ -40,7 +40,7 @@ class PinyinTool:
     '''
 
     @staticmethod
-    def single_get_first(self, unicode1):
+    def single_get_first( unicode1):
         '''
         取拼音首字母
         :param unicode1:
@@ -101,7 +101,7 @@ class PinyinTool:
             return ''
 
     @staticmethod
-    def getPinyinAbridge(self, string):
+    def getPinyinAbridge(string):
         '''
         汉字拼音首字母缩写
         :param string:
@@ -109,11 +109,11 @@ class PinyinTool:
         '''
         if string == None:
             return None
-        lst = list(string)
+        lst = list(string.replace(" ", ""))
         charLst = []
         for l in lst:
-            charLst.append(self.single_get_first(l))
-        return ''.join(charLst)
+            charLst.append(PinyinTool.single_get_first(l))
+        return (''.join(charLst))
 
 
 class SpiderTool:

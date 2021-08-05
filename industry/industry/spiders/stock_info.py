@@ -26,12 +26,13 @@ class StockInfoSpider(scrapy.Spider):
                     code = industryInfo.__getattribute__("code")
                     if code:
                         start_url = url % code
-                        yield Request(start_url, callback=self.parse_item)
+                        yield Request(start_url, callback=self.parse_item,meta={'name':industryInfo.__getattribute__("name")})
 
     def __init__(self, *args, **kwargs):
         self.bro = Chrome()
 
     def parse_item(self, response):
+        industry_name = response.meta["name"]  ##取出数据
 
         # 股票tr
         tr_stocks = response.xpath('//*[@id="dataview"]/div[2]/div[2]/table/tbody/tr')
@@ -43,7 +44,7 @@ class StockInfoSpider(scrapy.Spider):
             stock_item['stock_code'] = stock_code
             stock_item['stock_name'] = stock_name
             stock_item['stock_detail_url'] = stock_detail_url
-            # stock_item['industry_name'] = item['industry_name']
+            stock_item['industry_name'] = industry_name
             yield stock_item
 
     def cutOutTail(self, funds):

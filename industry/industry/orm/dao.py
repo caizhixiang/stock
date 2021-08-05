@@ -63,7 +63,11 @@ class IndustryStockDao:
         stock = IndustryStock()
         ObjDictTool.to_obj(obj=stock, **item)
         stock.__setattr__('create_time', datetime.now())
-        stock.__setattr__('abridge', PinyinTool.getPinyinAbridge(stock.__getattribute__('stock_name')))
+        try:
+            stock.__setattr__('abridge', PinyinTool.getPinyinAbridge(stock.__getattribute__('stock_name')))
+        except:
+            print(stock.__getattribute__('stock_name'))
+            print(PinyinTool.getPinyinAbridge(stock.__getattribute__('stock_name')))
         save(stock)
 
 

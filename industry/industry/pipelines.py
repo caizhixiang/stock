@@ -11,7 +11,7 @@ class IndustryPipeline:
             IndustrySectorFundsDao().save(item)
             # print(item)
         elif (isinstance(item, StockInfoItem)):
-            IndustryStockDao.save(item)
+            IndustryStockDao().save(item)
         elif (isinstance(item,IndustryItem)):
             IndustryInfoDao().save(item)
         elif (isinstance(item,StockMarketItem)):
