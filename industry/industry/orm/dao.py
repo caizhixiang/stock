@@ -64,7 +64,15 @@ class IndustryStockDao:
         ObjDictTool.to_obj(obj=stock, **item)
         stock.__setattr__('create_time', datetime.now())
         try:
-            stock.__setattr__('abridge', PinyinTool.getPinyinAbridge(stock.__getattribute__('stock_name')))
+
+            stock_name = stock.__getattribute__('stock_name')
+            if(stock_name.find(' ')>0):
+                stock_name=stock_name.replace(' ', '')
+            if(stock_name.find("*")>0):
+                stock_name=stock_name.replace("*",'')
+            if(stock_name.startswith('ST')):
+                stock_name = stock_name.replace("ST", '')
+            stock.__setattr__('abridge', PinyinTool.getPinyinAbridge(stock_name))
         except:
             print(stock.__getattribute__('stock_name'))
             print(PinyinTool.getPinyinAbridge(stock.__getattribute__('stock_name')))
@@ -92,7 +100,7 @@ class StockMarketDao:
         filtrs = [StockMarket.market_code == item['market_code'], StockMarket.create_time == '2021-02-04 15:00:00']
 
         data = queryOneByFilter(StockMarket, *filtrs)
-        print(data)
+        # print(data)
         if data:
             {setattr(data, k, v) for k, v in item.items()}
             # print(data)
